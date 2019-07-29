@@ -14,6 +14,9 @@ class _TravelPageState extends State<TravelPage>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      appBar: new AppBar(
+        title: Text("旅拍"),
+      ),
       body: Center(
         child: Text("旅拍"),
       ),

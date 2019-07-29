@@ -61,6 +61,8 @@ class _HomePageState extends State<HomePage>{
                             );
                           },
                           pagination: SwiperPagination(),
+//                          viewportFraction: 0.8,
+//                          scale: 0.9,
                         ),
                       ),
                       ListTile(

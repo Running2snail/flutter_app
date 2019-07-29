@@ -14,6 +14,9 @@ class _MyPageState extends State<MyPage>{
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      appBar: new AppBar(
+        title: Text("我的"),
+      ),
       body: Center(
         child: Text("我的"),
       ),
