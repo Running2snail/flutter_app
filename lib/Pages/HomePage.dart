@@ -2,6 +2,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:my_app/Model/common_model.dart';
+import 'package:my_app/Model/home_model.dart';
+import 'package:my_app/dao/home_dao.dart';
+import 'dart:convert';
+import 'package:my_app/widget/grid_nav.dart';
+import 'package:my_app/widget/local_nav.dart';
 
 const APPBAR_SCROLL_OFFSET = 100;
 
@@ -20,6 +26,10 @@ class _HomePageState extends State<HomePage>{
   ];
   double appBarAlpha = 0;
 
+  String resultString = "";
+
+  List<CommonModel> localNavList = [];
+
   _onScroll(offset) {
     double alpha = offset / APPBAR_SCROLL_OFFSET;
     if (alpha < 0) {
@@ -32,10 +42,39 @@ class _HomePageState extends State<HomePage>{
     });
     print(appBarAlpha);
   }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadData();
+  }
+
+  loadData() async {
+//    HomeDao.fetch().then((result){
+//      setState(() {
+//        resultString = js
+//      });
+//    });
+    try {
+      HomeModel model = await HomeDao.fetch();
+      setState(() {
+        localNavList = model.localNavList;
+//        resultString = json.encode(model.config);
+      });
+    } catch (e) {
+      setState(() {
+        resultString = e.toString();
+      });
+    }
+
+  }
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      backgroundColor: Color(0xfff2f2),
       body: Stack(
         children: <Widget>[
           MediaQuery.removePadding(
@@ -65,28 +104,32 @@ class _HomePageState extends State<HomePage>{
 //                          scale: 0.9,
                         ),
                       ),
-                      ListTile(
-                        title: new Text('SwiperController', style: TextStyle(fontWeight: FontWeight.w500),),
-                        subtitle: new Text('iconPrevious'),
-                        leading: new Icon(Icons.account_box, color: Colors.lightBlue),
+//                      ListTile(
+//                        title: new Text('SwiperController', style: TextStyle(fontWeight: FontWeight.w500),),
+//                        subtitle: new Text('iconPrevious'),
+//                        leading: new Icon(Icons.account_box, color: Colors.lightBlue),
+//                      ),
+//                      new Divider(),
+//                      ListTile(
+//                        title: new Text('SwiperController', style: TextStyle(fontWeight: FontWeight.w500),),
+//                        subtitle: new Text('scrollDirection'),
+//                        leading: new Icon(Icons.account_box, color: Colors.lightBlue),
+//                      ),
+//                      new Divider(),
+//                      ListTile(
+//                        title: new Text('SwiperController', style: TextStyle(fontWeight: FontWeight.w500),),
+//                        subtitle: new Text('onIndexChanged'),
+//                        leading: new Icon(Icons.account_box, color: Colors.lightBlue),
+//                      ),
+//                      new Divider(),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(7, 4, 7, 4),
+                        child: LocalNav(localNavList: localNavList),
                       ),
-                      new Divider(),
-                      ListTile(
-                        title: new Text('SwiperController', style: TextStyle(fontWeight: FontWeight.w500),),
-                        subtitle: new Text('scrollDirection'),
-                        leading: new Icon(Icons.account_box, color: Colors.lightBlue),
-                      ),
-                      new Divider(),
-                      ListTile(
-                        title: new Text('SwiperController', style: TextStyle(fontWeight: FontWeight.w500),),
-                        subtitle: new Text('onIndexChanged'),
-                        leading: new Icon(Icons.account_box, color: Colors.lightBlue),
-                      ),
-                      new Divider(),
                       Container(
                         height: 400,
                         child: ListTile(
-                          title: Text(""),
+                          title: Text(resultString),
                         ),
                       ),
                     ],
