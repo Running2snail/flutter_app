@@ -3,11 +3,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:my_app/Model/common_model.dart';
+import 'package:my_app/Model/gridNav_model.dart';
 import 'package:my_app/Model/home_model.dart';
+import 'package:my_app/Model/sales_box_model.dart';
 import 'package:my_app/dao/home_dao.dart';
+import 'package:my_app/util/navigator_util.dart';
 import 'dart:convert';
 import 'package:my_app/widget/grid_nav.dart';
+import 'package:my_app/widget/loading_container.dart';
 import 'package:my_app/widget/local_nav.dart';
+import 'package:my_app/widget/sales_box.dart';
+import 'package:my_app/widget/sub_nav.dart';
+import 'package:my_app/widget/webView.dart';
 
 const APPBAR_SCROLL_OFFSET = 100;
 
@@ -29,6 +36,11 @@ class _HomePageState extends State<HomePage>{
   String resultString = "";
 
   List<CommonModel> localNavList = [];
+  List<CommonModel> bannerList = [];
+  List<CommonModel> subNavList = [];
+  GridNavModel gridNavModel;
+  SalesBoxModel salesBoxModel;
+  bool _loading = true;
 
   _onScroll(offset) {
     double alpha = offset / APPBAR_SCROLL_OFFSET;
@@ -47,24 +59,27 @@ class _HomePageState extends State<HomePage>{
   void initState() {
     // TODO: implement initState
     super.initState();
-    loadData();
+    _handleRefresh();
+    Future.delayed(Duration(milliseconds: 600), () {
+      FlutterSplashScreen.hide();
+    });
   }
 
-  loadData() async {
-//    HomeDao.fetch().then((result){
-//      setState(() {
-//        resultString = js
-//      });
-//    });
+  Future<Null> _handleRefresh() async {
     try {
       HomeModel model = await HomeDao.fetch();
       setState(() {
         localNavList = model.localNavList;
-//        resultString = json.encode(model.config);
+        gridNavModel = model.gridNav;
+        bannerList = model.bannerList;
+        subNavList = model.subNavList;
+        salesBoxModel = model.salesBox;
+        _loading = false;
       });
     } catch (e) {
       setState(() {
         resultString = e.toString();
+        _loading = false;
       });
     }
 
@@ -75,85 +90,93 @@ class _HomePageState extends State<HomePage>{
     // TODO: implement build
     return Scaffold(
       backgroundColor: Color(0xfff2f2),
-      body: Stack(
-        children: <Widget>[
-          MediaQuery.removePadding(
+      body: LoadingContainer(
+        isLoading: _loading,
+        child: Stack(
+          children: <Widget>[
+            MediaQuery.removePadding(
               removeTop: true,
               context: context,
-              child:NotificationListener(
-                  onNotification: (scrollNotification) {
-                    if (scrollNotification is ScrollUpdateNotification && scrollNotification.depth == 0) {
-                        _onScroll(scrollNotification.metrics.pixels);
-                    }
-                  },
-                  child:new ListView(
-                    children: <Widget>[
-                      Container(
-                        height: 240,
-                        child: Swiper(
-                          itemCount: _imageUrls.length,
-                          autoplay: true,
-                          itemBuilder: (BuildContext context, int index){
-                            return Image.network(
-                              _imageUrls[index],
-                              fit: BoxFit.fill,
-                            );
-                          },
-                          pagination: SwiperPagination(),
-//                          viewportFraction: 0.8,
-//                          scale: 0.9,
-                        ),
-                      ),
-//                      ListTile(
-//                        title: new Text('SwiperController', style: TextStyle(fontWeight: FontWeight.w500),),
-//                        subtitle: new Text('iconPrevious'),
-//                        leading: new Icon(Icons.account_box, color: Colors.lightBlue),
-//                      ),
-//                      new Divider(),
-//                      ListTile(
-//                        title: new Text('SwiperController', style: TextStyle(fontWeight: FontWeight.w500),),
-//                        subtitle: new Text('scrollDirection'),
-//                        leading: new Icon(Icons.account_box, color: Colors.lightBlue),
-//                      ),
-//                      new Divider(),
-//                      ListTile(
-//                        title: new Text('SwiperController', style: TextStyle(fontWeight: FontWeight.w500),),
-//                        subtitle: new Text('onIndexChanged'),
-//                        leading: new Icon(Icons.account_box, color: Colors.lightBlue),
-//                      ),
-//                      new Divider(),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(7, 4, 7, 4),
-                        child: LocalNav(localNavList: localNavList),
-                      ),
-                      Container(
-                        height: 400,
-                        child: ListTile(
-                          title: Text(resultString),
-                        ),
-                      ),
-                    ],
-                  ),
+              child: RefreshIndicator(
+                  child: NotificationListener(
+                onNotification: (scrollNotification) {
+                  if (scrollNotification is ScrollUpdateNotification && scrollNotification.depth == 0) {
+                    _onScroll(scrollNotification.metrics.pixels);
+                  }
+                },
+                child: _listView,
               ),
-          ),
-          Opacity(
-            opacity: appBarAlpha,
-            child: Container(
-              height: 80,
-              decoration: BoxDecoration(color: Colors.blue),
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.only(top: 20),
-                  child: Text(
+                  onRefresh: _handleRefresh),
+            ),
+            Opacity(
+              opacity: appBarAlpha,
+              child: Container(
+                height: 80,
+                decoration: BoxDecoration(color: Colors.blue),
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 20),
+                    child: Text(
                       "首页",
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
                   ),
                 ),
               ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       )
+    );
+  }
+
+
+  Widget get _listView {
+    return ListView(
+      children: <Widget>[
+        _banner,
+        Padding(
+          padding: EdgeInsets.fromLTRB(7, 4, 7, 4),
+          child: LocalNav(localNavList: localNavList),
+        ),
+        Padding(
+            padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
+            child: GridNav(gridNavModel: gridNavModel)),
+        Padding(
+            padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
+            child: SubNav(subNavList: subNavList)),
+        Padding(
+            padding: EdgeInsets.fromLTRB(7, 0, 7, 4),
+            child: SalesBox(salesBox: salesBoxModel)),
+      ],
+    );
+  }
+
+  Widget get _banner {
+    return Container(
+      height: 160,
+      child: Swiper(
+        itemCount: bannerList.length,
+        autoplay: true,
+        itemBuilder: (BuildContext context, int index) {
+          return GestureDetector(
+            onTap: () {
+              CommonModel model = bannerList[index];
+              NavigatorUtil.push(
+                  context,
+                  WebView(
+                      url: model.url,
+                      title: model.title,
+                      hideAppBar: model.hideAppbar));
+            },
+            child: Image.network(
+              bannerList[index].icon,
+              fit: BoxFit.fill,
+            ),
+          );
+        },
+        pagination: SwiperPagination(),
+      ),
     );
   }
 
