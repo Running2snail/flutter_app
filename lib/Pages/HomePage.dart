@@ -6,6 +6,7 @@ import 'package:my_app/Model/common_model.dart';
 import 'package:my_app/Model/gridNav_model.dart';
 import 'package:my_app/Model/home_model.dart';
 import 'package:my_app/Model/sales_box_model.dart';
+import 'package:my_app/Pages/SearchPage.dart';
 import 'package:my_app/dao/home_dao.dart';
 import 'package:my_app/util/navigator_util.dart';
 import 'dart:convert';
@@ -13,10 +14,12 @@ import 'package:my_app/widget/grid_nav.dart';
 import 'package:my_app/widget/loading_container.dart';
 import 'package:my_app/widget/local_nav.dart';
 import 'package:my_app/widget/sales_box.dart';
+import 'package:my_app/widget/search_bar.dart';
 import 'package:my_app/widget/sub_nav.dart';
 import 'package:my_app/widget/webView.dart';
 
 const APPBAR_SCROLL_OFFSET = 100;
+const SEARCH_BAR_DEFAULT_TEXT = '网红打卡地 景点 酒店 美食';
 
 class HomePage extends StatefulWidget {
   @override
@@ -26,14 +29,8 @@ class HomePage extends StatefulWidget {
 
 
 class _HomePageState extends State<HomePage>{
-  List _imageUrls = [
-    'http://pages.ctrip.com/commerce/promote/20180718/yxzy/img/640sygd.jpg',
-    'https://dimg04.c-ctrip.com/images/700u0r000000gxvb93E54_810_235_85.jpg',
-    'https://dimg04.c-ctrip.com/images/700c10000000pdili7D8B_780_235_57.jpg'
-  ];
-  double appBarAlpha = 0;
 
-  String resultString = "";
+  double appBarAlpha = 0;
 
   List<CommonModel> localNavList = [];
   List<CommonModel> bannerList = [];
@@ -57,12 +54,8 @@ class _HomePageState extends State<HomePage>{
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _handleRefresh();
-    Future.delayed(Duration(milliseconds: 600), () {
-      FlutterSplashScreen.hide();
-    });
   }
 
   Future<Null> _handleRefresh() async {
@@ -78,7 +71,6 @@ class _HomePageState extends State<HomePage>{
       });
     } catch (e) {
       setState(() {
-        resultString = e.toString();
         _loading = false;
       });
     }
@@ -87,7 +79,6 @@ class _HomePageState extends State<HomePage>{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       backgroundColor: Color(0xfff2f2),
       body: LoadingContainer(
@@ -108,28 +99,51 @@ class _HomePageState extends State<HomePage>{
               ),
                   onRefresh: _handleRefresh),
             ),
-            Opacity(
-              opacity: appBarAlpha,
-              child: Container(
-                height: 80,
-                decoration: BoxDecoration(color: Colors.blue),
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 20),
-                    child: Text(
-                      "首页",
-                      style: TextStyle(fontSize: 18, color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-            )
+            _appBar
           ],
         ),
       )
     );
   }
 
+
+  Widget get _appBar {
+    return Column(
+      children: <Widget>[
+        Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0x66000000), Colors.transparent],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
+          ),
+          child: Container(
+            padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+            height: 80.0,
+            decoration: BoxDecoration(
+              color: Color.fromARGB((appBarAlpha * 255).toInt(), 255, 255, 255)
+            ),
+            child: SearchBar(
+              searchBarType: appBarAlpha > 0.2 
+              ? SearchBarType.homeLight
+              : SearchBarType.home,
+              inputBoxClick: _jumpToSearch,
+              speakClick: _jumpToSpeak,
+              defaultText: SEARCH_BAR_DEFAULT_TEXT,
+              leftButtonClick: (){},
+            ),
+          ),
+        ),
+        Container(
+          height: appBarAlpha > 0.2 ? 0.5 : 0,
+          decoration: BoxDecoration(
+            boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 0.5)]
+          ),
+        )
+      ],
+    );
+  }
 
   Widget get _listView {
     return ListView(
@@ -178,6 +192,18 @@ class _HomePageState extends State<HomePage>{
         pagination: SwiperPagination(),
       ),
     );
+  }
+
+  _jumpToSearch() {
+      NavigatorUtil.push(
+        context, 
+        SearchPage(
+          hint: SEARCH_BAR_DEFAULT_TEXT,
+        ));
+  }
+
+  _jumpToSpeak(){
+    // NavigatorUtil.push(context, Spea)
   }
 
 }

@@ -57,18 +57,18 @@ class _TabNavigatorState extends State<TabNavigator>{
           ),
         ),
         BottomNavigationBarItem(
-            icon: Icon( Icons.camera_alt, color: _defaultColor, ),
-            activeIcon: Icon( Icons.camera_alt, color: _activityColor, ),
-            title: Text(
-                "旅拍",
-              style: TextStyle(color: _currentIndex == 1 ? _activityColor : _defaultColor),
-            ),
-        ),
-        BottomNavigationBarItem(
           icon: Icon( Icons.search, color: _defaultColor, ),
           activeIcon: Icon( Icons.search, color: _activityColor, ),
           title: Text(
             "搜索",
+            style: TextStyle(color: _currentIndex == 1 ? _activityColor : _defaultColor),
+          ),
+        ),
+        BottomNavigationBarItem(
+          icon: Icon( Icons.camera_alt, color: _defaultColor, ),
+          activeIcon: Icon( Icons.camera_alt, color: _activityColor, ),
+          title: Text(
+            "旅拍",
             style: TextStyle(color: _currentIndex == 2 ? _activityColor : _defaultColor),
           ),
         ),
