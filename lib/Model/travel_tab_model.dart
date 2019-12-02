@@ -1,39 +1,39 @@
-abstract class TravelItemModel {
-  int totalCount;
-  List<TravelItem> resultList;
 
+class TravelTabModel {
+  Map params;
+  String url;
+  List<TravelTab> tabs;
 
+  TravelTabModel({this.url ,this.tabs});
 
-  TravelItemModel.fromJson(Map<String, dynamic> json) {
-    totalCount = json['totalCount'];
-    if (json['resultList'] != null) {
-      resultList = new List<TravelItem>();
-      json['resultList'].forEach((v) {
-        resultList.add(new TravelItem.fromJson(v));
+  TravelTabModel.fromJson(Map<String, dynamic> json) {
+    url = json['url'];
+    params = json['params'];
+    if (json['tabs'] != null) {
+      tabs = new List<TravelTab>();
+      json['tabs'].forEach((v) {
+        tabs.add(new TravelTab.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['totalCount'] = this.totalCount;
-    if (this.resultList != null) {
-      data['resultList'] = this.resultList.map((v) => v.toJson()).toList();
+    data['url'] = this.url;
+    if (this.tabs != null) {
+      data['tabs'] = this.tabs.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-
-
-
-class TravelItem {
+class TravelTab {
   String labelName;
   String groupChannelCode;
 
-  TravelItem({this.labelName, this.groupChannelCode});
+  TravelTab({this.labelName, this.groupChannelCode});
 
-  TravelItem.fromJson(Map<String, dynamic> json) {
+  TravelTab.fromJson(Map<String, dynamic> json) {
     labelName = json['labelName'];
     groupChannelCode = json['groupChannelCode'];
   }
