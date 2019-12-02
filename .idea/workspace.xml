@@ -4,26 +4,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cdbebc86-4627-4e9d-ae08-309e23b140c5" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/.symlinks/plugins/flutter_webview_plugin" beforeDir="false" afterPath="$PROJECT_DIR$/ios/.symlinks/plugins/flutter_webview_plugin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Flutter/App.framework/flutter_assets/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Flutter/App.framework/flutter_assets/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Flutter/App.framework/flutter_assets/kernel_blob.bin" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Flutter/App.framework/flutter_assets/kernel_blob.bin" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Pods/Pods.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Pods/Pods.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/Runner/Info.plist" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Runner/Info.plist" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Model/travel_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Model/travel_model.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Model/travel_tab_model.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Model/travel_tab_model.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Pages/TravelPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Pages/TravelPage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/Pages/TravelTabPage.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/Pages/TravelTabPage.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/dao/travel_dao.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/dao/travel_dao.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/dao/travel_tab_dao.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/dao/travel_tab_dao.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/navigator/tab_navigator.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/navigator/tab_navigator.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
-    </list>
+    <list default="true" id="cdbebc86-4627-4e9d-ae08-309e23b140c5" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
     <ignored path="$PROJECT_DIR$/.idea/" />
     <ignored path="$PROJECT_DIR$/.pub/" />
