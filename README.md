@@ -16,6 +16,6 @@ For help getting started with Flutter, view our
 samples, guidance on mobile development, and a full API reference.
 
 
-![首页](https://github.com/Running2snail/flutter_app/blob/master/首页.png)
-![搜索](https://github.com/Running2snail/flutter_app/blob/master/搜索.png)
-![旅拍](https://github.com/Running2snail/flutter_app/blob/master/旅拍.png)
+![首页](https://github.com/Running2snail/flutter_app/blob/master/TabImg/Home.png)
+![搜索](https://github.com/Running2snail/flutter_app/blob/master/TabImg/Search.png)
+![旅拍](https://github.com/Running2snail/flutter_app/blob/master/TabImg/Travel.png)
