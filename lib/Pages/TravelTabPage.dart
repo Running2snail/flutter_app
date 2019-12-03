@@ -5,6 +5,7 @@ import 'package:my_app/Model/travel_model.dart';
 import 'package:my_app/dao/travel_dao.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:my_app/util/navigator_util.dart';
+import 'package:my_app/widget/loading_container.dart';
 import 'package:my_app/widget/webView.dart';
 
 const _TRAVEL_URL =
@@ -31,13 +32,18 @@ class _TravelTabPageState extends State<TravelTabPage> with SingleTickerProvider
   List<TravelItem> travelItems = [];
   int pageIndex = 1;
   bool _loading = true;
-
+  ScrollController _scrollController = ScrollController();
 
 
   @override
   void initState() {
 
     _loadData();
+    _scrollController.addListener((){
+      if(_scrollController.position.pixels == _scrollController.position.maxScrollExtent){
+        _loadData(loadMore: true);
+      }
+    });
     super.initState();
   }
 
@@ -50,19 +56,33 @@ class _TravelTabPageState extends State<TravelTabPage> with SingleTickerProvider
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      body:StaggeredGridView.countBuilder(
-        crossAxisCount: 4,
-        itemCount: travelItems?.length ?? 0,
-        itemBuilder: (BuildContext context, int index) => _TravelItem(index: index, item: travelItems[index]),
-        staggeredTileBuilder: (int index) => new StaggeredTile.fit(2),
+      body:LoadingContainer(
+        isLoading: _loading,
+        child: RefreshIndicator(
+            child: MediaQuery.removePadding(
+                removeTop: true,
+                context: context,
+                child: StaggeredGridView.countBuilder(
+                  controller: _scrollController,
+                  crossAxisCount: 4,
+                  itemCount: travelItems?.length ?? 0,
+                  itemBuilder: (BuildContext context, int index) => _TravelItem(index: index, item: travelItems[index]),
+                  staggeredTileBuilder: (int index) => new StaggeredTile.fit(2),
+                )),
+            onRefresh: _handleRefresh)
       )
     );
   }
 
-  void _loadData(){
+  void _loadData({loadMore = false}){
 
+    if (loadMore) {
+      pageIndex++ ;
+    } else {
+      pageIndex = 1 ;
+    }
     TravelDao.fetch(widget.travelUrl ?? _TRAVEL_URL, widget.params, widget.groupChannelCode, pageIndex, PAGE_SIZE).then((TravelItemModel model) {
-
+      _loading = false;
       setState(() {
         List<TravelItem> items = _filterItems(model.resultList);
         if (travelItems != null) {
@@ -73,6 +93,7 @@ class _TravelTabPageState extends State<TravelTabPage> with SingleTickerProvider
       });
 
     }).catchError((e) {
+      _loading = false;
       print(e);
     });
   }
@@ -91,6 +112,10 @@ class _TravelTabPageState extends State<TravelTabPage> with SingleTickerProvider
     return filterItems;
   }
 
+  Future<Null> _handleRefresh() async{
+    _loadData();
+    return null;
+  }
 
 }
 
